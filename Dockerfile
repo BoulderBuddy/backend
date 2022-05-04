@@ -31,9 +31,13 @@ RUN . /venv/bin/activate && poetry build
 FROM base as final
 
 ENV PATH="/venv/bin:${PATH}" \
-    VIRTUAL_ENV="/venv"
+   VIRTUAL_ENV="/venv"
 
 COPY --from=builder /venv /venv
 COPY --from=builder /app/dist .
 
 RUN . /venv/bin/activate && pip install *.whl
+
+ENTRYPOINT []
+
+CMD ["./entrypoint.sh"]
