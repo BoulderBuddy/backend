@@ -51,7 +51,7 @@ jobs:
       - name: Run isort
         run: poetry run isort $SOURCE_DIR $TESTS_DIR --check-only --profile black
       - name: Run flake8
-        run: poetry run flake8 $SOURCE_DIR
+        run: poetry run flake8 $SOURCE_DIR $TESTS_DIR
       - name: Run bandit
         run: poetry run bandit $SOURCE_DIR -r
       - name: Run saftey
