@@ -95,7 +95,7 @@ def test_read_user(client: TestClient, db: Session) -> None:
     validate_payload(r.json(), TestSchemas.USER)
 
 
-def test_read_user_not_found(client: TestClient, db: Session) -> None:
+def test_read_user_not_found(client: TestClient) -> None:
     f"""
     GIVEN ID of User missing in the database
     WHEN endpoint /{USER_ENDPOINT}/<user-id>/ is called
