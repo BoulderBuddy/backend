@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app import crud
-from app.schemas import UserCreate
+from app.schemas.user import UserCreate
 
 
 def test_create_user(db: Session) -> None:
