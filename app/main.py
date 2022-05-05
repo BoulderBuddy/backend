@@ -1,28 +1,20 @@
-from fastapi import Depends, FastAPI
-from sqlalchemy.orm import Session
+from fastapi import FastAPI
 
-from app import crud, schemas
-from app.config import Settings, get_settings
-from app.deps import get_db
+from app.api import api_router
+from app.api.error_http import add_custom_exception_handlers
 
-app = FastAPI()
+app = FastAPI(title="BoulderBuddy")
 
 
-@app.get("/")
-def read_root(settings: Settings = Depends(get_settings)):
-    return {"Environment": settings.environment, "Testing": settings.testing}
+add_custom_exception_handlers(app)
+app.include_router(api_router)
 
 
-@app.get("/users/", response_model=list[schemas.User])
-def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return crud.user.get_multi(db, skip=skip, limit=limit)
+# @app.get("/")
+# def read_root(settings: Settings = Depends(get_settings)):
+#     return {"Environment": settings.environment, "Testing": settings.testing}
 
 
-@app.post("/users/", response_model=schemas.User)
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    return crud.user.create(db, obj_in=user)
-
-
-@app.get("/workouts/", response_model=list[schemas.Workout])
-def read_workouts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return crud.workout.get_multi(db, skip=skip, limit=limit)
+# @app.get("/workouts/", response_model=list[schemas.Workout])
+# def read_workouts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+#     return crud.workout.get_multi(db, skip=skip, limit=limit)
