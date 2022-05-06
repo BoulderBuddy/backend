@@ -26,3 +26,15 @@ def read_single_user(user_id: int, db: Session = Depends(get_db)):
     if user is None:
         raise NotFoundException("User could not be found")
     return user
+
+
+@router.put("/{user_id}", response_model=user.User, responses={**NotFoundResponse})
+def update_user(
+    user_id: int, user_update: user.UserUpdate, db: Session = Depends(get_db)
+):
+    user_db = crud.user.get(db, user_id)
+    if user_db is None:
+        raise NotFoundException("User could not be found")
+
+    user = crud.user.update(db, db_obj=user_db, obj_in=user_update)
+    return user

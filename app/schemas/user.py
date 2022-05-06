@@ -15,7 +15,7 @@ class UserCreate(UserBase):
 
 # Properties to receive via API on update
 class UserUpdate(UserBase):
-    pass
+    email: EmailStr | None
 
 
 class UserInDBBase(UserBase):

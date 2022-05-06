@@ -107,3 +107,35 @@ def test_read_user_not_found(client: TestClient) -> None:
 
     assert r.status_code == 404
     assert r.json() is not None
+
+
+@pytest.mark.parametrize(
+    "data",
+    [{"first_name": "bert", "surname": "van ernie"}],
+)
+def test_update_user(client: TestClient, db: Session, data: Dict[str, Any]) -> None:
+    f"""
+    GIVEN ID of stored in database
+    WHEN endpoint /{USER_ENDPOINT}/<user-id>/ is called
+    THEN it should return User in valid json schema
+    """
+    user_db = crud.user.create(db, obj_in=UserCreate(email="bert@ernie.com"))
+    id = user_db.id
+
+    r = client.put(f"/{USER_ENDPOINT}/{id}", json=data)
+
+    validate_payload(r.json(), TestSchemas.USER)
+
+
+def test_update_user_not_found(client: TestClient) -> None:
+    f"""
+    GIVEN ID of User missing in the database
+    WHEN endpoint /{USER_ENDPOINT}/<user-id>/ is called
+    THEN it should return status 404
+    """
+    id = 42
+
+    r = client.get(f"/{USER_ENDPOINT}/{id}")
+
+    assert r.status_code == 404
+    assert r.json() is not None
