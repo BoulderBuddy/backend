@@ -3,6 +3,7 @@ import sqlalchemy as sa
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session, sessionmaker
 
+from app import crud, models, schemas
 from app.api.deps import get_db
 from app.db.database import Base
 from app.main import app
@@ -17,6 +18,14 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 # Set up the database once
 Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
+
+_db = TestingSessionLocal()
+
+
+class TestData:
+    USER: models.User = crud.user.create(
+        _db, obj_in=schemas.UserCreate(email="gert@bert.nl")
+    )
 
 
 # These two event listeners are only needed for sqlite for proper

@@ -4,4 +4,5 @@ from app.schemas.workout import WorkoutCreate, WorkoutUpdate
 from .base import CRUDBase
 from .crud_user import user
 
-workout = CRUDBase[Workout, WorkoutCreate, WorkoutUpdate]
+__workout = CRUDBase[Workout, WorkoutCreate, WorkoutUpdate]
+workout = __workout(Workout)

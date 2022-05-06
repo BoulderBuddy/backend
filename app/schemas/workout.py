@@ -1,21 +1,21 @@
-from datetime import datetime
+from datetime import date
 
 from pydantic import BaseModel
 
 
 class WorkoutBase(BaseModel):
-    date: datetime
+    date: date
     comment: str | None
 
 
 class WorkoutCreate(WorkoutBase):
-    date: datetime
+    date: date
     comment: str | None
     user_id: int
 
 
 class WorkoutUpdate(WorkoutBase):
-    date: datetime
+    date: date | None
     comment: str | None
 
 
