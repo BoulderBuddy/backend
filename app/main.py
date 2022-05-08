@@ -17,4 +17,4 @@ app.include_router(api_router)
 
 # @app.get("/sessions/", response_model=list[schemas.TrainingSession])
 # def read(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-#     return crud.trainingsession.get_multi(db, skip=skip, limit=limit)
+#     return crud.training_session.get_multi(db, skip=skip, limit=limit)

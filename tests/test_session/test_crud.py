@@ -9,7 +9,7 @@ from app.schemas import TrainingSessionCreate, TrainingSessionUpdate
 from tests.conftest import TestData
 
 
-def insert_test_trainingsession_into_db(
+def insert_test_training_session_into_db(
     db: Session, data: Dict[str, Any] | None = None
 ) -> models.TrainingSession:
     if data is None:
@@ -19,8 +19,8 @@ def insert_test_trainingsession_into_db(
             "user_id": TestData.USER.id,
         }
 
-    trainingsession_in = TrainingSessionCreate(**data)
-    return crud.training_session.create(db, obj_in=trainingsession_in)
+    training_session_in = TrainingSessionCreate(**data)
+    return crud.training_session.create(db, obj_in=training_session_in)
 
 
 @pytest.mark.parametrize(
@@ -37,13 +37,13 @@ def insert_test_trainingsession_into_db(
         },
     ],
 )
-def test_create_trainingsession(db: Session, data: Dict[str, Any]) -> None:
-    trainingsession = insert_test_trainingsession_into_db(db, data)
+def test_create_training_session(db: Session, data: Dict[str, Any]) -> None:
+    training_session = insert_test_training_session_into_db(db, data)
 
-    assert trainingsession is not None
-    assert trainingsession.comment == data.get("comment")
-    assert trainingsession.date == data.get("date")
-    assert trainingsession.user_id == data.get("user_id")
+    assert training_session is not None
+    assert training_session.comment == data.get("comment")
+    assert training_session.date == data.get("date")
+    assert training_session.user_id == data.get("user_id")
 
 
 @pytest.mark.parametrize(
@@ -61,20 +61,21 @@ def test_create_trainingsession(db: Session, data: Dict[str, Any]) -> None:
         },
     ],
 )
-def test_update_trainingsession(db: Session, data: Dict[str, Any]) -> None:
-    trainingsession_db = insert_test_trainingsession_into_db(db)
+def test_update_training_session(db: Session, data: Dict[str, Any]) -> None:
+    training_session_db = insert_test_training_session_into_db(db)
 
-    trainingsession_update = TrainingSessionUpdate(**data)
-    trainingsession = crud.training_session.update(
-        db, db_obj=trainingsession_db, obj_in=trainingsession_update
+    training_session_update = TrainingSessionUpdate(**data)
+    training_session = crud.training_session.update(
+        db, db_obj=training_session_db, obj_in=training_session_update
     )
 
-    assert trainingsession is not None
+    assert training_session is not None
     assert (
-        trainingsession.comment == trainingsession_update.comment
-        or trainingsession_db.comment
+        training_session.comment == training_session_update.comment
+        or training_session_db.comment
     )
     assert (
-        trainingsession.date == trainingsession_update.date or trainingsession_db.date
+        training_session.date == training_session_update.date
+        or training_session_db.date
     )
-    assert trainingsession.user_id == trainingsession_db.user_id
+    assert training_session.user_id == training_session_db.user_id

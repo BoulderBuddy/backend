@@ -1,7 +1,8 @@
-from app.models.session import TrainingSession
-from app.schemas.session import TrainingSessionCreate, TrainingSessionUpdate
+from app.models import TrainingSession
+from app.schemas import TrainingSessionCreate, TrainingSessionUpdate
 
 from .base import CRUDBase
+from .crud_exercise import exercise_parameter
 from .crud_user import user
 
 __training_session = CRUDBase[
