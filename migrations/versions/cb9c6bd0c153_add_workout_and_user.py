@@ -1,4 +1,4 @@
-"""Add workout and user
+"""Add trainingsession and user
 
 Revision ID: cb9c6bd0c153
 Revises:
@@ -28,7 +28,7 @@ def upgrade():
     op.create_index("ix_user_id", "user", ["id"], unique=False)
     op.create_index("ix_user_email", "user", ["email"], unique=False)
     op.create_table(
-        "workout",
+        "trainingsession",
         sa.Column("id", sa.INTEGER(), nullable=False),
         sa.Column("date", sa.DATE(), nullable=False),
         sa.Column("comment", sa.VARCHAR(), nullable=True),
@@ -39,12 +39,12 @@ def upgrade():
         ),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index("ix_workout_id", "workout", ["id"], unique=False)
+    op.create_index("ix_trainingsession_id", "trainingsession", ["id"], unique=False)
 
 
 def downgrade():
-    op.drop_index("ix_workout_id", table_name="workout")
-    op.drop_table("workout")
+    op.drop_index("ix_trainingsession_id", table_name="trainingsession")
+    op.drop_table("trainingsession")
     op.drop_index("ix_user_email", table_name="user")
     op.drop_index("ix_user_id", table_name="user")
     op.drop_table("user")

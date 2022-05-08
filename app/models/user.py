@@ -10,8 +10,8 @@ class User(Base):
     surname = Column(String(256), nullable=True)
     email = Column(String, unique=True, index=True, nullable=False)
     is_superuser = Column(Boolean, default=False)
-    workouts = relationship(
-        "Workout",
+    sessions = relationship(
+        "TrainingSession",
         cascade="all,delete-orphan",
         back_populates="user",
         uselist=True,

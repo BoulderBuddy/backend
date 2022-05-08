@@ -3,24 +3,24 @@ from datetime import date
 from pydantic import BaseModel
 
 
-class WorkoutBase(BaseModel):
+class TrainingSessionBase(BaseModel):
     date: date
     comment: str | None
 
 
-class WorkoutCreate(WorkoutBase):
+class TrainingSessionCreate(TrainingSessionBase):
     date: date
     comment: str | None
     user_id: int
 
 
-class WorkoutUpdate(WorkoutBase):
+class TrainingSessionUpdate(TrainingSessionBase):
     date: date | None
     comment: str | None
 
 
 # Properties shared by models stored in DB
-class WorkoutInDBBase(WorkoutBase):
+class TrainingSessionInDBBase(TrainingSessionBase):
     id: int
     user_id: int
 
@@ -29,10 +29,10 @@ class WorkoutInDBBase(WorkoutBase):
 
 
 # Properties to return to client
-class Workout(WorkoutInDBBase):
+class TrainingSession(TrainingSessionInDBBase):
     pass
 
 
 # Properties properties stored in DB
-class WorkoutInDB(WorkoutInDBBase):
+class TrainingSessionInDB(TrainingSessionInDBBase):
     pass
