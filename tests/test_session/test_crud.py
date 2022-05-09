@@ -7,20 +7,18 @@ from sqlalchemy.orm import Session
 from app import crud, models
 from app.schemas import TrainingSessionCreate, TrainingSessionUpdate
 from tests.conftest import TestData
+from tests.utils import insert_into_db_template
 
+_default_training_session_data = TrainingSessionCreate(
+    date=date.fromisocalendar(1990, 12, 5), comment="Hallo", user_id=TestData.USER.id
+).__dict__
 
-def insert_test_training_session_into_db(
-    db: Session, data: Dict[str, Any] | None = None
-) -> models.TrainingSession:
-    if data is None:
-        data = {
-            "date": date.fromisocalendar(1990, 12, 5),
-            "comment": "Hallo",
-            "user_id": TestData.USER.id,
-        }
-
-    training_session_in = TrainingSessionCreate(**data)
-    return crud.training_session.create(db, obj_in=training_session_in)
+insert_test_training_session_into_db = insert_into_db_template(
+    models.TrainingSession,
+    TrainingSessionCreate,
+    crud.training_session,
+    _default_training_session_data,
+)
 
 
 @pytest.mark.parametrize(

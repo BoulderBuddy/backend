@@ -1,6 +1,11 @@
 from app.crud.base import CRUDBase
-from app.models import ExerciseParameter
-from app.schemas import ExerciseParameterCreate, ExerciseParameterUpdate
+from app.models import Exercise, ExerciseParameter
+from app.schemas import (
+    ExerciseCreate,
+    ExerciseParameterCreate,
+    ExerciseParameterUpdate,
+    ExerciseUpdate,
+)
 
 
 class CRUDExerciseParameter(
@@ -10,3 +15,10 @@ class CRUDExerciseParameter(
 
 
 exercise_parameter = CRUDExerciseParameter(ExerciseParameter)
+
+
+class CRUDExercise(CRUDBase[Exercise, ExerciseCreate, ExerciseUpdate]):
+    pass
+
+
+exercise = CRUDExercise(Exercise)

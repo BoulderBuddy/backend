@@ -4,20 +4,28 @@ import pytest
 from sqlalchemy.orm import Session
 
 from app import crud, models
-from app.schemas import ExerciseParameterCreate, ExerciseParameterUpdate
+from app.schemas import ExerciseCreate, ExerciseParameterCreate, ExerciseParameterUpdate
+from tests.conftest import TestData
+from tests.utils import insert_into_db_template
 
+_default_exer_para_data = ExerciseParameterCreate(name="mm", unit_type="int").__dict__
+_default_exercise_data = ExerciseCreate(
+    name="Piet", parameter_ids=[TestData.EXER_PARA_1.id, TestData.EXER_PARA_2.id]
+).__dict__
 
-def insert_exercise_parameter_into_db(
-    db: Session, data: Dict[str, Any] | None = None
-) -> models.ExerciseParameter:
-    if data is None:
-        data = {
-            "name": "Fred",
-            "unit_type": "Integer",
-        }
+insert_exercise_parameter_into_db = insert_into_db_template(
+    models.ExerciseParameter,
+    ExerciseParameterCreate,
+    crud.exercise_parameter,
+    _default_exer_para_data,
+)
 
-    obj_in = ExerciseParameterCreate(**data)
-    return crud.exercise_parameter.create(db, obj_in=obj_in)
+insert_exercise_into_db = insert_into_db_template(
+    models.Exercise,
+    ExerciseCreate,
+    crud.exercise,
+    _default_exercise_data,
+)
 
 
 @pytest.mark.parametrize(
@@ -25,7 +33,7 @@ def insert_exercise_parameter_into_db(
     [
         {
             "name": "Fred",
-            "unit_type": "Integer",
+            "unit_type": "int",
         },
     ],
 )
@@ -42,13 +50,13 @@ def test_create_exercise_parameter(db: Session, data: Dict[str, Any]) -> None:
     [
         {
             "name": "Fred",
-            "unit_type": "Integer",
+            "unit_type": "int",
         },
         {
             "name": "Fred",
         },
         {
-            "unit_type": "Integer",
+            "unit_type": "int",
         },
         {},
     ],

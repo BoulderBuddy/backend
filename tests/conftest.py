@@ -26,6 +26,12 @@ class TestData:
     USER: models.User = crud.user.create(
         _db, obj_in=schemas.UserCreate(email="gert@bert.nl")
     )
+    EXER_PARA_1: models.ExerciseParameter = crud.exercise_parameter.create(
+        _db, obj_in=schemas.ExerciseParameterCreate(name="mm", unit_type="int")
+    )
+    EXER_PARA_2: models.ExerciseParameter = crud.exercise_parameter.create(
+        _db, obj_in=schemas.ExerciseParameterCreate(name="kg", unit_type="float")
+    )
 
 
 # These two event listeners are only needed for sqlite for proper
