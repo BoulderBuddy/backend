@@ -5,7 +5,11 @@ from .base import CRUDBase
 from .crud_exercise import exercise, exercise_parameter
 from .crud_user import user
 
-__training_session = CRUDBase[
-    TrainingSession, TrainingSessionCreate, TrainingSessionUpdate
-]
-training_session = __training_session(TrainingSession)
+
+class CRUDTrainingSession(
+    CRUDBase[TrainingSession, TrainingSessionCreate, TrainingSessionUpdate]
+):
+    pass
+
+
+training_session = CRUDTrainingSession(TrainingSession)

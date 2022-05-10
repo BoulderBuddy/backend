@@ -50,15 +50,22 @@ class ExerciseUpdate(ExerciseBase):
 
 class ExerciseInDBBase(ExerciseBase):
     id: int
-    parameter_ids: List[int]
 
     class Config:
         orm_mode = True
 
 
 class Exercise(ExerciseInDBBase):
-    pass
+    parameter_ids: List[int]
+
+    @classmethod
+    def from_orm(cls, obj) -> "Exercise":
+        # `obj` is the orm model instance
+        if hasattr(obj, "parameters"):
+            obj.parameter_ids = [x.id for x in obj.parameters]
+            delattr(obj, "parameters")
+        return super().from_orm(obj)
 
 
 class ExerciseInDB(ExerciseInDBBase):
-    pass
+    parameter_ids: List[int]

@@ -15,6 +15,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 class_registry: Dict = {}
 
 
+def create_database_scheme():
+    Base.metadata.create_all(bind=engine)
+
+
 @as_declarative(class_registry=class_registry)
 class Base:
     id: Any
@@ -24,3 +28,9 @@ class Base:
     @declared_attr
     def __tablename__(cls) -> str:
         return cls.__name__.lower()
+
+    def as_dict(self) -> Dict[str, Any]:
+        return dict(
+            (column.name, getattr(self, column.name))
+            for column in self.__table__.columns
+        )
