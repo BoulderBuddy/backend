@@ -13,6 +13,10 @@ from app.db.database import Base
 class TestSchemas:
     USER: str = "User.json"
     USER_LIST: str = "UserList.json"
+    EXERCISE_PARAMETER: str = "ExerciseParameter.json"
+    EXERCISE_PARAMETER_LIST: str = "ExerciseParameterList.json"
+    EXERCISE: str = "Exercise.json"
+    EXERCISE_LIST: str = "ExerciseList.json"
 
 
 def validate_payload(payload, schema_name):

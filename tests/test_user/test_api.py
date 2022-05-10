@@ -31,7 +31,7 @@ def test_create_user_new_email(client: TestClient, data: Dict[str, Any]) -> None
     r = client.post(f"/{USER_ENDPOINT}/", json=data)
     created_user = r.json()
 
-    assert 200 == r.status_code
+    assert r.status_code == 200
     assert data["email"] == created_user["email"]
     validate_payload(created_user, TestSchemas.USER)
 
@@ -127,7 +127,11 @@ def test_update_user(client: TestClient, db: Session, data: Dict[str, Any]) -> N
     validate_payload(r.json(), TestSchemas.USER)
 
 
-def test_update_user_not_found(client: TestClient) -> None:
+@pytest.mark.parametrize(
+    "data",
+    [{"first_name": "bert", "surname": "van ernie"}],
+)
+def test_update_user_not_found(client: TestClient, data: Dict[str, Any]) -> None:
     f"""
     GIVEN ID of User missing in the database
     WHEN endpoint /{USER_ENDPOINT}/<user-id>/ is called
@@ -135,7 +139,7 @@ def test_update_user_not_found(client: TestClient) -> None:
     """
     id = 42
 
-    r = client.get(f"/{USER_ENDPOINT}/{id}")
+    r = client.put(f"/{USER_ENDPOINT}/{id}", json=data)
 
     assert r.status_code == 404
     assert r.json() is not None
