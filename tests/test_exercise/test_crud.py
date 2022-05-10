@@ -6,7 +6,12 @@ from sqlalchemy.orm import Session
 from app import crud
 from app.crud.crud_exercise import CRUDExercise, CRUDExerciseParameter
 from app.models import Exercise, ExerciseParameter
-from app.schemas import ExerciseCreate, ExerciseParameterCreate
+from app.schemas import (
+    ExerciseCreate,
+    ExerciseParameterCreate,
+    ExerciseParameterUpdate,
+    ExerciseUpdate,
+)
 from tests.conftest import TestData
 from tests.utils import CRUDTestUtil
 
@@ -15,13 +20,16 @@ _default_exercise_data = ExerciseCreate(
     name="Piet", parameter_ids=[TestData.EXER_PARA_1.id, TestData.EXER_PARA_2.id]
 ).__dict__
 
-exercise_parameter_crud_util = CRUDTestUtil[CRUDExerciseParameter, ExerciseParameter](
-    _default_exer_para_data, crud.exercise_parameter
-)
+exercise_parameter_crud_util = CRUDTestUtil[
+    CRUDExerciseParameter,
+    ExerciseParameter,
+    ExerciseParameterCreate,
+    ExerciseParameterUpdate,
+](_default_exer_para_data, crud.exercise_parameter)
 
-exercise_crud_util = CRUDTestUtil[CRUDExercise, Exercise](
-    _default_exercise_data, crud.exercise
-)
+exercise_crud_util = CRUDTestUtil[
+    CRUDExercise, Exercise, ExerciseCreate, ExerciseUpdate
+](_default_exercise_data, crud.exercise)
 
 
 @pytest.mark.parametrize("data", [{"name": "Fred", "unit_type": "int"}])
