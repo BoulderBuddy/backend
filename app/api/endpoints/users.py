@@ -30,7 +30,11 @@ def read_single_user(user_id: int, db: Session = Depends(get_db)):
     return user
 
 
-@router.put("/{user_id}", response_model=User, responses={**NotFoundResponse})
+@router.put(
+    "/{user_id}",
+    response_model=User,
+    responses={**NotFoundResponse, **AlreadyExistsResponse},
+)
 def update_user(user_id: int, user_update: UserUpdate, db: Session = Depends(get_db)):
     user_db = crud.user.get(db, user_id)
     if user_db is None:
