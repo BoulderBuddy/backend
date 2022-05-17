@@ -4,7 +4,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "sqlite:////tmp/boulderbuddy.db"
+from app.core.config import settings
+
+SQLALCHEMY_DATABASE_URL = f"sqlite:///{settings.sqlite_db_path}"
 # SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
 
 engine = create_engine(

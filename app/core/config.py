@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     environment: str = "dev"
     testing: bool = False
     backend_cors_origins: list[AnyHttpUrl] = []
+    sqlite_db_path: str = ""
 
     @validator("backend_cors_origins", pre=True)
     def assemble_cors_origins(cls, v: Union[str, list[str]]) -> Union[list[str], str]:
