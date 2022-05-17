@@ -93,3 +93,19 @@ def test_update_exercise_not_found(client: TestClient) -> None:
 
     assert r.status_code == 404
     assert r.json() is not None
+
+
+def test_delete_exercise(client: TestClient) -> None:
+    id = TestData.EXERCISE_1.id
+
+    r = client.delete(f"/{EXERCISE_ENDPOINT}/{id}", json={})
+
+    assert r.status_code == 204
+
+
+def test_delete_exercise_not_found(client: TestClient) -> None:
+    id = 42
+
+    r = client.delete(f"/{EXERCISE_ENDPOINT}/{id}", json={})
+
+    assert r.status_code == 404

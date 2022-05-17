@@ -28,16 +28,6 @@ class HTTPErrorAlreadyExists(BaseError):
         }
 
 
-NotFoundResponse = {
-    404: {"model": HTTPErrorNotFound, "description": "Resource could not be found"}
-}
-
-
-AlreadyExistsResponse = {
-    400: {"model": HTTPErrorAlreadyExists, "description": "Resource already exists"}
-}
-
-
 def add_custom_exception_handlers(app: FastAPI) -> None:
     @app.exception_handler(NotFoundException)
     async def not_found_exception_handler(request: Request, exc: NotFoundException):

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app import crud
 from app.api.deps import get_db
-from app.api.error_http import AlreadyExistsResponse, NotFoundResponse
+from app.api.responses import AlreadyExistsResponse, NotFoundResponse
 from app.core.exceptions import AlreadyExistsException, NotFoundException
 from app.schemas import User, UserCreate, UserUpdate
 

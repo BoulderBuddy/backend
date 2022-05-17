@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
 
 from app import crud
 from app.api.deps import get_db
-from app.api.error_http import NotFoundResponse
+from app.api.responses import NoContentResponse, NotFoundResponse
 from app.core.exceptions import NotFoundException
 from app.schemas import Exercise, ExerciseCreate, ExerciseUpdate
 
@@ -30,3 +30,11 @@ def update_exercise(
 
     exercise = crud.exercise.update(db, db_obj=exercise_db, obj_in=exercise_update)
     return exercise
+
+
+@router.delete("/{exercise_id}", responses={**NotFoundResponse, **NoContentResponse})
+def delete_exercise(exercise_id: int, db: Session = Depends(get_db)):
+    exercise_db = crud.exercise.remove(db, id=exercise_id)
+    if exercise_db is None:
+        raise NotFoundException("Exercise could not be found")
+    return Response(status_code=204)

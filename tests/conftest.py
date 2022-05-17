@@ -26,11 +26,17 @@ class TestData:
     USER: models.User = crud.user.create(
         _db, obj_in=schemas.UserCreate(email="gert@bert.nl")
     )
-    EXER_PARA_1: schemas.ExerciseParameter = crud.exercise_parameter.create(
+    EXER_PARA_1: models.ExerciseParameter = crud.exercise_parameter.create(
         _db, obj_in=schemas.ExerciseParameterCreate(name="mm")
     )
-    EXER_PARA_2: schemas.ExerciseParameter = crud.exercise_parameter.create(
+    EXER_PARA_2: models.ExerciseParameter = crud.exercise_parameter.create(
         _db, obj_in=schemas.ExerciseParameterCreate(name="kg")
+    )
+    EXERCISE_1: models.Exercise = crud.exercise.create(
+        _db,
+        obj_in=schemas.ExerciseCreate(
+            name="Moeilijke Oefening", parameter_ids=[EXER_PARA_1.id]
+        ),
     )
 
 
