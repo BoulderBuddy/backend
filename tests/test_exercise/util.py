@@ -6,7 +6,7 @@ from tests.conftest import TestData
 from tests.utils import CRUDTestUtil
 
 _default_exercise_data = ExerciseCreate(
-    name="Piet", parameters=[TestData.EXER_PARA_1, TestData.EXER_PARA_2]
+    name="Piet", parameter_ids=[TestData.EXER_PARA_1.id, TestData.EXER_PARA_2.id]
 ).__dict__
 
 exercise_crud_util = CRUDTestUtil[

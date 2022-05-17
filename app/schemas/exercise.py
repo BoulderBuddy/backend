@@ -38,24 +38,31 @@ class ExerciseBase(BaseModel):
 
 
 class ExerciseCreate(ExerciseBase):
-    parameters: List[ExerciseParameter]
+    parameter_ids: List[int]
 
 
 class ExerciseUpdate(ExerciseBase):
     name: str | None
-    parameters: List[ExerciseParameter] | None
+    parameter_ids: List[int] | None
 
 
 class ExerciseInDBBase(ExerciseBase):
     id: int
-    parameters: List[ExerciseParameter]
 
     class Config:
         orm_mode = True
 
 
 class Exercise(ExerciseInDBBase):
-    pass
+    parameter_ids: List[int]
+
+    @classmethod
+    def from_orm(cls, obj) -> "Exercise":
+        # `obj` is the orm model instance
+        if hasattr(obj, "parameters"):
+            obj.parameter_ids = [x.id for x in obj.parameters]
+            delattr(obj, "parameters")
+        return super().from_orm(obj)
 
 
 class ExerciseInDB(ExerciseInDBBase):

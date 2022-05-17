@@ -15,7 +15,11 @@ EXERCISE_ENDPOINT = "exercises"
 
 @pytest.mark.parametrize(
     "data",
-    [schemas.ExerciseCreate(name="The Dinosaur", parameters=[TestData.EXER_PARA_1])],
+    [
+        schemas.ExerciseCreate(
+            name="The Dinosaur", parameter_ids=[TestData.EXER_PARA_1.id]
+        )
+    ],
 )
 def test_create_exercise(client: TestClient, data: schemas.ExerciseCreate) -> None:
     f"""
@@ -31,7 +35,7 @@ def test_create_exercise(client: TestClient, data: schemas.ExerciseCreate) -> No
 
 @pytest.mark.parametrize(
     "data",
-    [{"parameters": [TestData.EXER_PARA_1.json()]}, {"name": "The Dinosaur"}, {}],
+    [{"parameter_ids": [TestData.EXER_PARA_1.id]}, {"name": "The Dinosaur"}, {}],
 )
 def test_create_exercise_invalid(client: TestClient, data: Dict[str, Any]) -> None:
     f"""
@@ -61,7 +65,7 @@ def test_read_all_exercise(client: TestClient, db: Session) -> None:
 
 @pytest.mark.parametrize(
     "data",
-    [{"parameters": [TestData.EXER_PARA_1.__dict__]}, {"name": "The Dinosaur"}, {}],
+    [{"parameter_ids": [TestData.EXER_PARA_1.id]}, {"name": "The Dinosaur"}, {}],
 )
 def test_update_exercise(client: TestClient, db: Session, data: Dict[str, Any]) -> None:
     f"""

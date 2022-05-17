@@ -26,9 +26,9 @@ exercise_parameter = CRUDExerciseParameter(ExerciseParameter)
 
 class CRUDExercise(CRUDBase[Exercise, ExerciseCreate, ExerciseUpdate]):
     def create(self, db: Session, *, obj_in: ExerciseCreate) -> Exercise:
-        obj_in_dict = obj_in.dict()
+        obj_in_dict = obj_in.dict(exclude={"parameter_ids"})
         obj_in_dict["parameters"] = exercise_parameter.get_multi_by_id(
-            db, ids=[x.id for x in obj_in.parameters]
+            db, ids=obj_in.parameter_ids
         )
         db_obj = Exercise(**obj_in_dict)
         return super()._save(db, db_obj=db_obj)
@@ -36,10 +36,10 @@ class CRUDExercise(CRUDBase[Exercise, ExerciseCreate, ExerciseUpdate]):
     def update(
         self, db: Session, *, db_obj: Exercise, obj_in: ExerciseUpdate
     ) -> Exercise:
-        obj_in_dict = obj_in.dict(exclude_unset=True)
-        if obj_in.parameters is not None:
+        obj_in_dict = obj_in.dict(exclude={"parameter_ids"}, exclude_unset=True)
+        if obj_in.parameter_ids is not None:
             db_obj.parameters = exercise_parameter.get_multi_by_id(
-                db, ids=[x.id for x in obj_in.parameters]
+                db, ids=obj_in.parameter_ids
             )
 
         return super().update(db, db_obj=db_obj, obj_in=obj_in_dict)
