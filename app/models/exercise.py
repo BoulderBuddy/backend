@@ -7,7 +7,6 @@ from app.db.database import Base
 class ExerciseParameter(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(256), nullable=False)
-    unit_type = Column(String(256), nullable=False)
 
 
 class ExerciseParameterAssociation(Base):

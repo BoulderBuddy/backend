@@ -5,7 +5,6 @@ from pydantic import BaseModel
 
 class ExerciseParameterBase(BaseModel):
     name: str
-    unit_type: str  # Should be enum
 
 
 class ExerciseParameterCreate(ExerciseParameterBase):
@@ -14,7 +13,6 @@ class ExerciseParameterCreate(ExerciseParameterBase):
 
 class ExerciseParameterUpdate(ExerciseParameterBase):
     name: str | None
-    unit_type: str | None
 
 
 # Properties shared by models stored in DB

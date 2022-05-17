@@ -28,12 +28,12 @@ class TestData:
     )
     EXER_PARA_1: schemas.ExerciseParameter = schemas.ExerciseParameter.from_orm(
         crud.exercise_parameter.create(
-            _db, obj_in=schemas.ExerciseParameterCreate(name="mm", unit_type="int")
+            _db, obj_in=schemas.ExerciseParameterCreate(name="mm")
         )
     )
     EXER_PARA_2: schemas.ExerciseParameter = schemas.ExerciseParameter.from_orm(
         crud.exercise_parameter.create(
-            _db, obj_in=schemas.ExerciseParameterCreate(name="kg", unit_type="float")
+            _db, obj_in=schemas.ExerciseParameterCreate(name="kg")
         )
     )
 

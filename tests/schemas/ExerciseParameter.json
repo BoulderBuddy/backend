@@ -6,12 +6,9 @@
         "name": {
             "type": ["string"]
         },
-        "unit_type": {
-            "type": ["string"]
-        },
         "id": {
             "type": "integer"
         }
     },
-    "required": ["id", "name", "unit_type"]
+    "required": ["id", "name"]
 }

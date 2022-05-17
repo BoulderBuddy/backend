@@ -14,7 +14,7 @@ PARAMETER_ENDPOINT_V1 = "/parameters"
 
 @pytest.mark.parametrize(
     "data",
-    [{"name": "reps", "unit_type": "int"}],
+    [{"name": "reps"}],
 )
 def test_create_exercise_parameter(client: TestClient, data: Dict[str, Any]) -> None:
     f"""
@@ -30,7 +30,7 @@ def test_create_exercise_parameter(client: TestClient, data: Dict[str, Any]) -> 
 
 @pytest.mark.parametrize(
     "data",
-    [{"name": "reps"}, {"unit_type": "int"}, {}],
+    [{}],
 )
 def test_create_exercise_parameter_invalid(
     client: TestClient, data: Dict[str, Any]

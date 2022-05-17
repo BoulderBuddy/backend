@@ -4,7 +4,7 @@ from app.models import ExerciseParameter
 from app.schemas import ExerciseParameterCreate, ExerciseParameterUpdate
 from tests.utils import CRUDTestUtil
 
-_default_exer_para_data = ExerciseParameterCreate(name="mm", unit_type="int").__dict__
+_default_exer_para_data = ExerciseParameterCreate(name="mm").__dict__
 
 exercise_parameter_crud_util = CRUDTestUtil[
     CRUDExerciseParameter,
