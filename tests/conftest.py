@@ -32,11 +32,9 @@ class TestData:
     EXER_PARA_2: models.ExerciseParameter = crud.exercise_parameter.create(
         _db, obj_in=schemas.ExerciseParameterCreate(name="kg")
     )
-    EXERCISE_1: models.Exercise = crud.exercise.create(
+    EXERCISE_1: models.Exercise = crud.exercise.save(
         _db,
-        obj_in=schemas.ExerciseCreate(
-            name="Moeilijke Oefening", parameter_ids=[EXER_PARA_1.id]
-        ),
+        db_obj=models.Exercise(name="Moeilijke Oefening", parameters=[EXER_PARA_1]),
     )
 
 

@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from pydantic.error_wrappers import ErrorWrapper
 
 from app.core.exceptions import AlreadyExistsException, NotFoundException
 
@@ -26,6 +27,19 @@ class HTTPErrorAlreadyExists(BaseError):
         schema_extra = {
             "example": {"detail": "Resource already exists", "identifier": "42"}
         }
+
+
+def get_field_name(obj: object, field):
+    gert = obj.__dict__
+    return [x for (x, y) in gert.items() if y == field].pop()
+
+
+def custom_validation_error(err: ValueError | str, obj, field_value, *, req_loc="body"):
+    if isinstance(err, str):
+        err = ValueError(err)
+
+    param_name = get_field_name(obj, field_value)
+    return [ErrorWrapper(err, (req_loc, param_name))]
 
 
 def add_custom_exception_handlers(app: FastAPI) -> None:

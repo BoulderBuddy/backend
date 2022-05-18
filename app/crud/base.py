@@ -30,9 +30,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
         db_obj = self.model(**obj_in.dict())
-        return self._save(db, db_obj=db_obj)
+        return self.save(db, db_obj=db_obj)
 
-    def _save(self, db: Session, *, db_obj: ModelType) -> ModelType:
+    def save(self, db: Session, *, db_obj: ModelType) -> ModelType:
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
@@ -52,7 +52,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         for field in db_obj.as_dict():
             if field in update_data:
                 setattr(db_obj, field, update_data[field])
-        return self._save(db, db_obj=db_obj)
+        return self.save(db, db_obj=db_obj)
 
     def remove(self, db: Session, *, id: int) -> ModelType | None:
         obj = self.get(db, id)

@@ -35,7 +35,12 @@ def test_create_exercise(client: TestClient, data: schemas.ExerciseCreate) -> No
 
 @pytest.mark.parametrize(
     "data",
-    [{"parameter_ids": [TestData.EXER_PARA_1.id]}, {"name": "The Dinosaur"}, {}],
+    [
+        {"parameter_ids": [TestData.EXER_PARA_1.id]},
+        {"name": "The Dinosaur"},
+        {},
+        {"name": "The Dinosaur", "parameter_ids": [42]},
+    ],
 )
 def test_create_exercise_invalid(client: TestClient, data: Dict[str, Any]) -> None:
     f"""

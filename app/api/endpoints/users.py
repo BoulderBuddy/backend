@@ -1,25 +1,15 @@
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import RequestValidationError
-from pydantic.error_wrappers import ErrorWrapper
 from sqlalchemy.orm import Session
 
 from app import crud
 from app.api.deps import get_db
+from app.api.error_http import custom_validation_error
 from app.api.responses import NotFoundResponse
 from app.core.exceptions import NotFoundException
 from app.schemas import User, UserCreate, UserUpdate
 
 router = APIRouter()
-
-
-def get_field_name(obj: object, field):
-    gert = obj.__dict__
-    return [x for (x, y) in gert.items() if y == field].pop()
-
-
-def custom_validation_error(msg, obj, field_value, *, req_loc="body"):
-    param_name = get_field_name(obj, field_value)
-    return [ErrorWrapper(ValueError(msg), (req_loc, param_name))]
 
 
 @router.get("/", response_model=list[User])

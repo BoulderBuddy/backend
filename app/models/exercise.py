@@ -18,8 +18,8 @@ class ExerciseParameterAssociation(Base):
 class Exercise(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(256), nullable=False)
-    parameters = relationship(
+    parameters: list[ExerciseParameter] = relationship(
         ExerciseParameter,
-        secondary="exerciseparameterassociation",
+        secondary=ExerciseParameterAssociation.__table__,
         overlaps="parameter,parameter_associations",
     )

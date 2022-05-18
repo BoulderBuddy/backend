@@ -4,6 +4,7 @@ import pytest
 from sqlalchemy.orm import Session
 
 from app import schemas
+from app.api.endpoints.exercise import create_exercise
 from tests.conftest import TestData
 from tests.test_exercise.util import exercise_crud_util
 
@@ -18,7 +19,7 @@ from tests.test_exercise.util import exercise_crud_util
     ],
 )
 def test_create_exercise(db: Session, data: schemas.ExerciseCreate) -> None:
-    obj = schemas.Exercise.from_orm(exercise_crud_util.insert_into_db(db, data))
+    obj = schemas.Exercise.from_orm(create_exercise(data, db=db))
     assert obj
     assert obj.name == data.name
     assert obj.parameter_ids == data.parameter_ids

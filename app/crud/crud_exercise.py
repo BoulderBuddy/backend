@@ -30,8 +30,10 @@ class CRUDExercise(CRUDBase[Exercise, ExerciseCreate, ExerciseUpdate]):
         obj_in_dict["parameters"] = exercise_parameter.get_multi_by_id(
             db, ids=obj_in.parameter_ids
         )
+        if len(obj_in.parameter_ids) != len(obj_in_dict["parameters"]):
+            raise ValueError(f"Parameters don't exist: {obj_in.parameter_ids}")
         db_obj = Exercise(**obj_in_dict)
-        return super()._save(db, db_obj=db_obj)
+        return super().save(db, db_obj=db_obj)
 
     def update(
         self, db: Session, *, db_obj: Exercise, obj_in: ExerciseUpdate
@@ -41,6 +43,8 @@ class CRUDExercise(CRUDBase[Exercise, ExerciseCreate, ExerciseUpdate]):
             db_obj.parameters = exercise_parameter.get_multi_by_id(
                 db, ids=obj_in.parameter_ids
             )
+            if len(obj_in.parameter_ids) != len(db_obj.parameters):
+                raise ValueError(f"Parameters don't exist: {obj_in.parameter_ids}")
 
         return super().update(db, db_obj=db_obj, obj_in=obj_in_dict)
 
