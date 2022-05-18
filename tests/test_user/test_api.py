@@ -88,6 +88,7 @@ def test_create_user_new_email(client: TestClient, data: Dict[str, Any]) -> None
         {"email": 123},
         {"email": "geen email adres hehehehe"},
         {"surname": "John Doe"},
+        {"email": TestData.USER.email},
         {},
     ],
 )
@@ -102,21 +103,6 @@ def test_create_user_unprocessable_entity(
     r = client.post(f"{USER_ENDPOINT}/", json=data)
 
     assert r.status_code == 422
-    assert r.json() is not None
-
-
-@pytest.mark.parametrize("data", [{"email": TestData.USER.email}])
-def test_create_user_invalid_email(
-    client: TestClient, db: Session, data: Dict[str, Any]
-) -> None:
-    f"""
-    GIVEN request data with missing or invalid data
-    WHEN endpoint {USER_ENDPOINT}/ is called
-    THEN it should return status 400
-    """
-    r = client.post(f"{USER_ENDPOINT}/", json=data)
-
-    assert r.status_code == 400
     assert r.json() is not None
 
 
@@ -143,6 +129,7 @@ def test_update_user(client: TestClient, db: Session, data: Dict[str, Any]) -> N
     [
         {"email": 123},
         {"email": "geen email adres hehehehe"},
+        {"email": TestData.USER.email},
     ],
 )
 def test_update_user_unprocessable_entity(
@@ -159,24 +146,6 @@ def test_update_user_unprocessable_entity(
     r = client.put(f"{USER_ENDPOINT}/{id}", json=data)
 
     assert r.status_code == 422
-    assert r.json() is not None
-
-
-@pytest.mark.parametrize("data", [{"email": TestData.USER.email}])
-def test_update_user_invalid_email(
-    client: TestClient, db: Session, data: Dict[str, Any]
-) -> None:
-    f"""
-    GIVEN request data with missing or invalid data
-    WHEN endpoint {USER_ENDPOINT}/<user-id>/ is called
-    THEN it should return status 400
-    """
-    db_obj = user_crud_util.insert_into_db(db, UserCreate(email="bert@ernie.com"))
-    id = db_obj.id
-
-    r = client.put(f"{USER_ENDPOINT}/{id}", json=data)
-
-    assert r.status_code == 400
     assert r.json() is not None
 
 
