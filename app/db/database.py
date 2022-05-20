@@ -16,6 +16,8 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, futu
 
 class_registry: Dict = {}
 
+KeyType = int  # TODO move
+
 
 def create_database_scheme():
     Base.metadata.create_all(bind=engine)

@@ -5,6 +5,7 @@ import pytest
 from sqlalchemy.orm import Session
 
 from app import crud, models
+from app.crud.crud_session import CRUDTrainingSession
 from app.schemas import TrainingSessionCreate, TrainingSessionUpdate
 from tests.conftest import TestData
 from tests.utils import CRUDTestUtil
@@ -15,11 +16,11 @@ _default_training_session_data = TrainingSessionCreate(
 
 
 training_session_crud_util = CRUDTestUtil[
-    crud.CRUDTrainingSession,
+    CRUDTrainingSession,
     models.TrainingSession,
     TrainingSessionCreate,
     TrainingSessionUpdate,
-](_default_training_session_data, crud.training_session)
+](_default_training_session_data, crud.session)
 
 
 @pytest.mark.parametrize(

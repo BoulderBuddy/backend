@@ -3,7 +3,7 @@ from typing import Any, Dict, Generic, List, Type, TypeVar, Union
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app.db.database import Base
+from app.db.database import Base, KeyType
 
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -20,7 +20,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         self.model = model
 
-    def get(self, db: Session, id: int) -> ModelType | None:
+    def get(self, db: Session, id: KeyType) -> ModelType | None:
         return db.query(self.model).get(id)
 
     def get_multi(
@@ -54,7 +54,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
                 setattr(db_obj, field, update_data[field])
         return self.save(db, db_obj=db_obj)
 
-    def remove(self, db: Session, *, id: int) -> ModelType | None:
+    def remove(self, db: Session, *, id: KeyType) -> ModelType | None:
         obj = self.get(db, id)
         if obj:
             db.delete(obj)

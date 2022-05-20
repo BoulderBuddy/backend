@@ -8,6 +8,7 @@ from app.api.deps import get_db
 from app.db.database import Base
 from app.main import app
 
+# TODO fix this to use database.py stuff
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
 engine = sa.create_engine(
