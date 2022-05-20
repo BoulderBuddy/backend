@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Enum, ForeignKey, ForeignKeyConstraint, Integer, Numeric
+from sqlalchemy import Column, Enum, ForeignKey, ForeignKeyConstraint, Integer
 from sqlalchemy.orm import relationship
 
-from app.db.database import Base, KeyType
+from app.db import CustomNumeric, KeyType
+from app.db.database import Base
 from app.types import SetStatus
 
 from .exercise import Exercise, ExerciseParameter
@@ -14,9 +15,9 @@ class ExerciseParameterValue(Base):
 
     parameter = relationship(ExerciseParameter)
     exercise = relationship(Exercise)
-    # TODO fix numeric error
-    value = Column(Numeric(precision=2, scale=10), nullable=False)
-    planned_value = Column(Numeric(precision=2, scale=10), nullable=True)
+
+    value = Column(CustomNumeric(scale=2), nullable=False)
+    planned_value = Column(CustomNumeric(scale=2), nullable=True)
 
 
 class Set(Base):
