@@ -48,6 +48,7 @@ def do_connect(dbapi_connection, connection_record):
     # disable pysqlite's emitting of the BEGIN statement entirely.
     # also stops it from emitting COMMIT before any DDL.
     dbapi_connection.isolation_level = None
+    # dbapi_connection.execute("PRAGMA foreign_keys=ON;")
 
 
 @sa.event.listens_for(engine, "begin")

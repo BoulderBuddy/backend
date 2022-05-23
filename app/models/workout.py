@@ -11,10 +11,13 @@ from .exercise import Exercise, ExerciseParameter
 class ExerciseParameterValue(Base):
     exercise_id: KeyType = Column(ForeignKey(Exercise.id), primary_key=True)
     parameter_id: KeyType = Column(ForeignKey(ExerciseParameter.id), primary_key=True)
-    set_index: int = Column(ForeignKey("set.index"), primary_key=True)
+    set_index: int = Column(
+        ForeignKey("set.index"), primary_key=True, onupdate="cascade"
+    )
 
     parameter = relationship(ExerciseParameter)
     exercise = relationship(Exercise)
+    set = relationship("Set", back_populates="values")
 
     value = Column(CustomNumeric(scale=2), nullable=False)
     planned_value = Column(CustomNumeric(scale=2), nullable=True)
@@ -38,6 +41,7 @@ class Set(Base):
     exercise_id: KeyType = Column(Integer, primary_key=True, nullable=False)
 
     values: list[ExerciseParameterValue] = relationship(ExerciseParameterValue)
+    exercise_set = relationship("ExerciseSet", back_populates="sets")
 
     status: SetStatus = Column(Enum(SetStatus))
 
@@ -45,14 +49,14 @@ class Set(Base):
 class ExerciseSet(Base):
     workout_id = Column(Integer, ForeignKey("workout.id"), primary_key=True)
     exercise_id = Column(Integer, ForeignKey(Exercise.id), primary_key=True)
-    exercise = relationship(Exercise)
+    exercise: Exercise = relationship(Exercise)
 
-    sets = relationship(Set)
+    sets: list[Set] = relationship(Set)
 
 
 class Workout(Base):
     id = Column(Integer, primary_key=True, index=True)
-    exercises = relationship(ExerciseSet)
+    exercises: list[ExerciseSet] = relationship(ExerciseSet)
 
     training_id = Column(
         Integer, ForeignKey("trainingsession.id"), nullable=True
