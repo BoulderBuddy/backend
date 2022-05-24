@@ -12,6 +12,11 @@ router = APIRouter()
 # TODO tests for all
 
 
+@router.get("/", response_model=list[schemas.TrainingSession])
+def read_all_training_sessions(db: Session = Depends(get_db)):
+    return crud.session.get_multi(db)
+
+
 @router.get(
     "/{session_id}",
     response_model=schemas.TrainingSessionDetail,
