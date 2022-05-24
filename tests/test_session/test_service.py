@@ -11,7 +11,6 @@ def test_crud(db: Session) -> None:
         TestData.EXERCISE_1, n_sets=2, value=15, status=schemas.SetStatus.COMPLETE
     )
     workout_create.exercises[0].sets[0].values[0].value = 33
-    workout_create.exercises[0].sets[0].values[0].parameter_id = TestData.EXER_PARA_2.id
     workout_create.exercises[0].sets[0].status = schemas.SetStatus.PARTIAL
 
     db_workout = add_workout(db, workout_create)
