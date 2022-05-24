@@ -25,28 +25,27 @@ exercise_parameter = CRUDExerciseParameter(ExerciseParameter)
 
 
 class CRUDExercise(CRUDBase[Exercise, ExerciseCreate, ExerciseUpdate]):
+    def _get_parameters(self, db: Session, obj_in):
+        parameter_ids = [x.id for x in obj_in.parameters]
+
+        params = exercise_parameter.get_multi_by_id(db, ids=parameter_ids)
+        if len(params) != len(obj_in.parameters):
+            # TODO this does not accurately reflect which parameters do and dont exist
+            raise ValueError(f"Parameters don't exist: {parameter_ids}")
+        return params
+
     def create(self, db: Session, *, obj_in: ExerciseCreate) -> Exercise:
-        obj_in_dict = obj_in.dict(exclude={"parameter_ids"})
-        obj_in_dict["parameters"] = exercise_parameter.get_multi_by_id(
-            db, ids=obj_in.parameter_ids
-        )
-        if len(obj_in.parameter_ids) != len(obj_in_dict["parameters"]):
-            raise ValueError(f"Parameters don't exist: {obj_in.parameter_ids}")
-        db_obj = Exercise(**obj_in_dict)
+        obj_in.parameters = self._get_parameters(db, obj_in)
+        db_obj = Exercise(**obj_in.dict())
         return super().save(db, db_obj=db_obj)
 
     def update(
         self, db: Session, *, db_obj: Exercise, obj_in: ExerciseUpdate
     ) -> Exercise:
-        obj_in_dict = obj_in.dict(exclude={"parameter_ids"}, exclude_unset=True)
-        if obj_in.parameter_ids is not None:
-            db_obj.parameters = exercise_parameter.get_multi_by_id(
-                db, ids=obj_in.parameter_ids
-            )
-            if len(obj_in.parameter_ids) != len(db_obj.parameters):
-                raise ValueError(f"Parameters don't exist: {obj_in.parameter_ids}")
+        if obj_in.parameters:
+            obj_in.parameters = self._get_parameters(db, obj_in)
 
-        return super().update(db, db_obj=db_obj, obj_in=obj_in_dict)
+        return super().update(db, db_obj=db_obj, obj_in=obj_in)
 
 
 exercise = CRUDExercise(Exercise)

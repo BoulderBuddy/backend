@@ -35,7 +35,9 @@ class TestData:
     )
     EXERCISE_1: models.Exercise = crud.exercise.save(
         _db,
-        db_obj=models.Exercise(name="Moeilijke Oefening", parameters=[EXER_PARA_1]),
+        db_obj=models.Exercise(
+            name="Moeilijke Oefening", parameters=[EXER_PARA_1, EXER_PARA_2]
+        ),
     )
 
 

@@ -23,7 +23,7 @@ def create_exercise(exercise: ExerciseCreate, db: Session = Depends(get_db)):
         return crud.exercise.create(db, obj_in=exercise)
     except ValueError as e:
         raise RequestValidationError(
-            custom_validation_error(e, exercise, exercise.parameter_ids)
+            custom_validation_error(e, exercise, exercise.parameters)
         )
 
 
@@ -38,7 +38,7 @@ def update_exercise(
         return crud.exercise.update(db, db_obj=exercise_db, obj_in=exercise_update)
     except ValueError as e:
         raise RequestValidationError(
-            custom_validation_error(e, exercise_update, exercise_update.parameter_ids)
+            custom_validation_error(e, exercise_update, exercise_update.parameters)
         )
 
 

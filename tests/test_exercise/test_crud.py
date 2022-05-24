@@ -14,7 +14,7 @@ from tests.test_exercise.util import exercise_crud_util
     [
         schemas.ExerciseCreate(
             name="Oefening",
-            parameter_ids=[TestData.EXER_PARA_1.id, TestData.EXER_PARA_2.id],
+            parameters=[TestData.EXER_PARA_1, TestData.EXER_PARA_2],
         )
     ],
 )
@@ -22,7 +22,7 @@ def test_create_exercise(db: Session, data: schemas.ExerciseCreate) -> None:
     obj = schemas.Exercise.from_orm(create_exercise(data, db=db))
     assert obj
     assert obj.name == data.name
-    assert obj.parameter_ids == data.parameter_ids
+    assert [x.id for x in obj.parameters] == [x.id for x in data.parameters]
 
 
 @pytest.mark.parametrize(
@@ -30,13 +30,13 @@ def test_create_exercise(db: Session, data: schemas.ExerciseCreate) -> None:
     [
         {
             "name": "Henky",
-            "parameter_ids": [TestData.EXER_PARA_1.id],
+            "parameters": [TestData.EXER_PARA_1],
         },
         {
             "name": "Henky",
         },
         {
-            "parameter_ids": [TestData.EXER_PARA_1.id],
+            "parameters": [TestData.EXER_PARA_1],
         },
         {},
     ],
@@ -46,7 +46,13 @@ def test_update_exercise(db: Session, data: Dict[str, Any]) -> None:
     obj = exercise_crud_util.update_into_db(db, db_obj, data)
 
     assert obj is not None
-    assert obj.name == data.get("name") or db_obj.name
-    assert [x.id for x in obj.parameters] == data.get("parameter_ids") or [
-        x.id for x in db_obj.parameters
-    ]
+
+    if name := data.get("name"):
+        assert obj.name == name
+    else:
+        assert obj.name == db_obj.name
+
+    if params := data.get("parameters"):
+        assert [x.id for x in obj.parameters] == [x.id for x in params]
+    else:
+        assert obj.parameters == db_obj.parameters

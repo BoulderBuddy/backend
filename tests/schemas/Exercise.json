@@ -8,10 +8,10 @@
                 "string"
             ]
         },
-        "parameter_ids": {
+        "parameters": {
             "type": "array",
             "items": {
-                "type": "integer"
+                "$ref": "file:ExerciseParameter.json"
             }
         },
         "id": {
@@ -21,6 +21,6 @@
     "required": [
         "id",
         "name",
-        "parameter_ids"
+        "parameters"
     ]
 }
