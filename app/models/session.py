@@ -13,4 +13,4 @@ class TrainingSession(Base):
     comment = Column(String, nullable=True)
     user_id = Column(Integer, ForeignKey(User.id), nullable=True)
     user = relationship(User, back_populates="sessions")
-    workouts = relationship(Workout)
+    workouts: list[Workout] = relationship(Workout)

@@ -6,7 +6,7 @@ from app.api.deps import get_db
 from app.api.responses import NotFoundResponse
 from app.core.exceptions import NotFoundException
 from app.db import KeyType
-from app.services.workout import add_workout
+from app.services.workout import upsert_workout
 
 router = APIRouter()
 # TODO tests for all
@@ -36,19 +36,19 @@ def create_training_session(
     return crud.session.create(db, obj_in=data)
 
 
-@router.post(
-    "/{session_id}/workouts",
-    response_model=schemas.TrainingSessionDetail,
-    responses={**NotFoundResponse},
-)
-def add_workout_to_session(
-    session_id: KeyType, data: schemas.WorkoutCreate, db: Session = Depends(get_db)
+@router.put("/", response_model=schemas.TrainingSessionDetail)
+async def upsert_training_session(
+    data: schemas.TrainingSessionUpsert, db: Session = Depends(get_db)
 ):
-    session = crud.session.get(db, session_id)
-    if session is None:
-        raise NotFoundException("Session could not be found")
+    session = None
 
-    db_workout = add_workout(db, data)
+    if data.id:
+        session = crud.session.get(db, data.id)
+        session.comment = data.comment
+    else:
+        session = crud.session.create(db, obj_in=data)
 
-    session.workouts.append(db_workout)
-    return crud.session.save(db, db_obj=session)
+    session.workouts = [upsert_workout(db, workout) for workout in data.workouts]
+
+    db_obj = crud.session.save(db, db_obj=session)
+    return db_obj

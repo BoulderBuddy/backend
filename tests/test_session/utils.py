@@ -6,9 +6,9 @@ from app.db import KeyType
 
 def create_epvs(
     exercise: models.Exercise, *, value: int = 10
-) -> list[schemas.ExerciseParameterValueCreate]:
+) -> list[schemas.ExerciseParameterValueUpsert]:
     return [
-        schemas.ExerciseParameterValueCreate(parameter_id=param.id, value=value)
+        schemas.ExerciseParameterValueUpsert(parameter_id=param.id, value=value)
         for param in exercise.parameters
     ]
 
@@ -19,9 +19,9 @@ def create_exercise_set(
     n_sets: int = 1,
     value: int = 10,
     status: schemas.SetStatus = schemas.SetStatus.COMPLETE,
-) -> list[schemas.SetCreate]:
+) -> list[schemas.SetUpsert]:
     set_creates = [
-        schemas.SetCreate(
+        schemas.SetUpsert(
             index=i,
             status=status,
             values=create_epvs(exercise, value=value),
@@ -29,14 +29,14 @@ def create_exercise_set(
         for i in range(n_sets)
     ]
 
-    bla = schemas.ExerciseSetCreate(exercise_id=exercise.id, sets=set_creates)
+    bla = schemas.ExerciseSetUpsert(exercise_id=exercise.id, sets=set_creates)
 
     return bla
 
 
 def create_workout(exercise: models.Exercise, **kw):
     exercise = create_exercise_set(exercise, **kw)
-    return schemas.WorkoutCreate(exercises=[exercise])
+    return schemas.WorkoutUpsert(exercises=[exercise])
 
 
 def create_session(

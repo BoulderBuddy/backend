@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app import crud
-from app.services.workout import add_workout
+from app.services.workout import upsert_workout
 from tests.conftest import TestData
 
 from .utils import create_session, create_workout
@@ -15,7 +15,7 @@ def setup_database(db: Session):
     session_create = create_session()
 
     db_obj = crud.session.create(db, obj_in=session_create)
-    db_workout = add_workout(db, workout_data)
+    db_workout = upsert_workout(db, workout_data)
     db_obj.workouts.append(db_workout)
     return crud.session.save(db, db_obj=db_obj)
 

@@ -12,9 +12,11 @@ from app.main import app
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
 engine = sa.create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}, future=True
 )
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+TestingSessionLocal = sessionmaker(
+    autocommit=False, autoflush=False, bind=engine, future=True
+)
 
 # Set up the database once
 Base.metadata.drop_all(bind=engine)
@@ -38,6 +40,10 @@ class TestData:
         db_obj=models.Exercise(
             name="Moeilijke Oefening", parameters=[EXER_PARA_1, EXER_PARA_2]
         ),
+    )
+    EXERCISE_2: models.Exercise = crud.exercise.save(
+        _db,
+        db_obj=models.Exercise(name="Makkelijke Oefening", parameters=[EXER_PARA_1]),
     )
 
 
