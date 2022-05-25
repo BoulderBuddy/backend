@@ -1,4 +1,6 @@
 from decimal import Decimal
+from enum import Enum, IntEnum
+from typing import Type
 
 from sqlalchemy import Integer, Numeric, TypeDecorator
 from sqlalchemy.engine.default import DefaultDialect
@@ -37,4 +39,22 @@ class CustomNumeric(TypeDecorator):
         # when query takes place.
         if value is not None and not dialect.supports_native_decimal:
             value = Decimal(value) / self.multiplier
+        return value
+
+
+class CustomEnum(TypeDecorator):
+    impl = Integer
+
+    def __init__(self, enum: Type[IntEnum]):
+        TypeDecorator.__init__(self)
+        self.enum_class = enum
+
+    def process_bind_param(self, value: Enum | None, dialect: DefaultDialect):
+        if value is not None:
+            value = self.enum_class[value.value].value
+        return value
+
+    def process_result_value(self, value: int, dialect: DefaultDialect):
+        if value is not None:
+            value = self.enum_class(value).name
         return value
