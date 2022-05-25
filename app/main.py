@@ -40,7 +40,7 @@ async def add_process_time_header(request: Request, call_next):
     method = request.method
     protocol_version = request.scope.get("http_version")
 
-    mesg = '%s:%d - "%s %s %s" %d %s - %.3f ms'
+    mesg = '%s:%d - "%s %s HTTP/%s" %d %s - %.3f ms'
     logger.log(
         logging.INFO,
         mesg,
