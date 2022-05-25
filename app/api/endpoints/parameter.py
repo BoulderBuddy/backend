@@ -5,8 +5,11 @@ from app import crud
 from app.api.deps import get_db
 from app.api.responses import NotFoundResponse
 from app.core.exceptions import NotFoundException
-from app.schemas import ExerciseParameter, ExerciseParameterCreate
-from app.schemas.exercise import ExerciseParameterUpdate
+from app.schemas import (
+    ExerciseParameter,
+    ExerciseParameterCreate,
+    ExerciseParameterUpdate,
+)
 
 router = APIRouter()
 
